@@ -1,0 +1,9 @@
+{
+  "dashboard": {
+    "title": "Home",
+    "description": "Welcome to UserManager"
+  },
+  "usersList": {
+    "title": "Users List"
+  }
+}
