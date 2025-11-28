@@ -120,7 +120,7 @@ const UsersList: React.FunctionComponent = () => {
       ))}
 
       <div className="tw:mt-6 tw:flex tw:items-center tw:justify-center tw:w-full ">
-        <div className="tw:text-sm tw:text-gray-600">
+        <div className="tw:text-sm tw:text-gray-600 tw:mr-4">
           Showing {(currentPage - 1) * PAGE_SIZE + 1} to{' '}
           {Math.min(currentPage * PAGE_SIZE, totalCount)} of {totalCount}{' '}
           results
