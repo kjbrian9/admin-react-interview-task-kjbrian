@@ -1,6 +1,32 @@
 import { Link } from '@tanstack/react-router'
 import vector from '../assets/Vector.svg'
-function LastActiveUserTable({ users }: { users: any[] }) {
+import { fetchPaginatedUsers, type User } from '@/usersApi'
+import { useEffect, useState } from 'react'
+function LastActiveUserTable() {
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const data = await fetchPaginatedUsers(1, 5, 'updatedAt', 'active')
+        setUsers(data.items)
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error'))
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    load()
+  }, [])
+
+  if (loading) return <div>Loading...</div>
+  if (error) return <div>Error: {error.message}</div>
+
   return (
     <div className=" tw:bg-white tw:rounded-[12px] tw:w-[90%] tw:border-[1.5px] tw:border-[#F0F0F0] tw:mb-20">
       <div className="tw:px-6 tw:py-4 tw:flex tw:flex-row tw:items-center tw:justify-between tw:border-b-[1.5px] tw:border-[#F0F0F0]">
@@ -18,14 +44,8 @@ function LastActiveUserTable({ users }: { users: any[] }) {
         </Link>
       </div>
       {users
-        .filter((user) => user.status === 'active')
-        .sort(
-          (a, b) =>
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
-        )
-        .slice(0, 5)
         .map((user) => (
-          <div className="tw:flex tw:flex-row tw:justify-between tw:items-center">
+          <div key={user.id} className="tw:flex tw:flex-row tw:justify-between tw:items-center">
             <div className="tw:flex tw:flex-row tw:gap-4 tw:px-6 tw:py-4 tw:items-center ">
               <div key={user.id}>
                 <p className="tw:bg-[#FF9C6E] tw:text-[#FFFFFF] tw:text-sm tw:rounded-full tw:p-3 tw:w-8 tw:h-8 tw:flex tw:items-center tw:justify-center">
